@@ -1,0 +1,85 @@
+table, .test {
+    border: none;
+    font-size: 8em;
+    width: 500px;
+    height: 500px;
+    border-collapse: collapse;
+    text-align: center;
+    margin: 0 auto;
+}
+tr{
+    height: 33%;
+}
+td{
+    width: 33%;
+}
+
+#one{
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+#two{
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    border-left: 2px solid black;
+}
+#three{
+    border-bottom: 2px solid black;
+    border-left: 2px solid black;
+    
+}
+#four{
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+}
+#five{
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+}
+#six{
+    border-bottom: 2px solid black;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+    
+}
+#seven{
+    border-right: 2px solid black;
+    border-top: 2px solid black;
+}
+#eight{
+    border-right: 2px solid black;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+}
+#nine{
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+    
+}
+
+.choose {
+    font-size: 3em;
+    width: 75%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+.choices {
+    color: #2284C3;
+}
+
+.picked {
+    color: #B23D3D;
+}
+
+.alert{
+    color: #741919;
+    text-align: center;
+    height: 50px;
+    vertical-align: central;
+    font-size: 2em;
+}
