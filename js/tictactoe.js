@@ -2,7 +2,9 @@ var msg = function(text){
     console.log(text);
 };
 
-var alertBox = $(".alert");
+var alertBox = $(".alert"); // Quick alert section grab
+
+// Starts the object 
 
 var TicTacToe = {
     player: 1,
@@ -14,6 +16,7 @@ var TicTacToe = {
     computerIs: ""
 };
 
+// Checks for a win
                        
 TicTacToe.checkForWin = function(playerNum) {
     var num = playerNum * 3;
@@ -32,12 +35,14 @@ TicTacToe.checkForWin = function(playerNum) {
     }
 };
 
+// Sets who is X and who is O
+
 TicTacToe.setPlayer = function(player, computer) {
     TicTacToe.playerIs = player;
     TicTacToe.computerIs = computer;
 };
 
-// Changes the array for the board
+// Changes the array for the board based off what cell the player clicks
 
 TicTacToe.changeBoard = function(name, player) {
     switch (name) {
@@ -82,17 +87,32 @@ TicTacToe.changeBoard = function(name, player) {
     }
 };
 
+// The computer turn
+// TODO:
+//     1. Have computer calculate best path towards its victory using minimax (!!!Last)
+//     2. Post to the cell
+//     3. Have "O" always start no matter who is playing.
+
 TicTacToe.computerTurn = function() {
     var row = Math.floor(Math.random() * 3);
     var col = Math.floor(Math.random() * 3);
+    var counter = 0;
 
     if (TicTacToe.board[row][col] !== 0) {
         console.log("Recursion is fun!");
-        TicTacToe.computerTurn();
+        counter++;
+
+        if (counter > 100 ) {
+            TicTacToe.computerTurn();
+        } else {
+            msg("Computer can't go anymore"); // to stop recursion during testing
+        }
     } else {
         msg("Computer can go there");
     }
 };
+
+// Click event to play the game
 
 $("td").click(function(event){
     var tdName = event.currentTarget.id;
@@ -118,6 +138,8 @@ $("td").click(function(event){
         alertBox.html("Pick a side, please.");
     }
 });
+
+// Click events to set the players.
 
 $("#o").click(function() {
 
