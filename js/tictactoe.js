@@ -90,8 +90,17 @@ TicTacToe.changeBoard = function(name, player) {
 // The computer turn
 // TODO:
 //     1. Have computer calculate best path towards its victory using minimax (!!!Last)
+//     1a. Array versus Object to store posibilities for minimax
 //     2. Post to the cell
 //     3. Have "O" always start no matter who is playing.
+
+TicTacToe.convertToID = function(row, col) {
+    var idNames = [["one","two","three"],
+                   ["four","five","six"],
+                   ["seven","eight","nine"]];
+
+    return idNames[row][col];
+};
 
 TicTacToe.computerTurn = function() {
     var row = Math.floor(Math.random() * 3);
@@ -102,13 +111,17 @@ TicTacToe.computerTurn = function() {
         console.log("Recursion is fun!");
         counter++;
 
-        if (counter > 100 ) {
+        if (counter > 500 ) {
             TicTacToe.computerTurn();
         } else {
             msg("Computer can't go anymore"); // to stop recursion during testing
         }
     } else {
-        msg("Computer can go there");
+        var placement = TicTacToe.convertToID(row, col);
+        $("#" + placement).html("<i class='" + TicTacToe.computerIs + "'></i>");
+        TicTacToe.changeBoard(placement, TicTacToe.computer);
+
+
     }
 };
 
@@ -170,3 +183,5 @@ $("#x").click(function() {
     }
 
 });
+
+msg($("td"));
