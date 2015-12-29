@@ -28,10 +28,24 @@ TicTacToe.checkForWin = function(playerNum) {
         TicTacToe.board[0][2] + TicTacToe.board[1][2] + TicTacToe.board[2][2] === num ||
         TicTacToe.board[0][0] + TicTacToe.board[1][1] + TicTacToe.board[2][2] === num ||
         TicTacToe.board[0][2] + TicTacToe.board[1][1] + TicTacToe.board[2][0] === num) {
-        console.log("win!");
         return true;
     } else {
         return false;
+    }
+};
+
+TicTacToe.checkForEnd = function() {
+
+    if (TicTacToe.board[0].indexOf(0) === -1  &&
+        TicTacToe.board[1].indexOf(0) === -1  &&
+        TicTacToe.board[2].indexOf(0) === -1 ) {
+
+        return true;
+
+    } else {
+
+        return false;
+
     }
 };
 
@@ -49,38 +63,47 @@ TicTacToe.changeBoard = function(name, player) {
         case "one":
             TicTacToe.board[0][0] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "two":
             TicTacToe.board[0][1] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "three":
             TicTacToe.board[0][2] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "four":
             TicTacToe.board[1][0] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "five":
             TicTacToe.board[1][1] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "six":
             TicTacToe.board[1][2] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "seven":
             TicTacToe.board[2][0] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "eight":
             TicTacToe.board[2][1] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         case "nine":
             TicTacToe.board[2][2] = player;
             TicTacToe.checkForWin(player);
+            TicTacToe.checkForEnd();
             break;
         default:
             break;
@@ -90,8 +113,6 @@ TicTacToe.changeBoard = function(name, player) {
 // The computer turn
 // TODO:
 //     1. Have computer calculate best path towards its victory using minimax (!!!Last)
-//     1a. Array versus Object to store posibilities for minimax
-//     2. Post to the cell
 //     3. Have "O" always start no matter who is playing.
 
 TicTacToe.convertToID = function(row, col) {
@@ -108,7 +129,6 @@ TicTacToe.computerTurn = function() {
     var counter = 0;
 
     if (TicTacToe.board[row][col] !== 0) {
-        console.log("Recursion is fun!");
         counter++;
 
         if (counter > 500 ) {
@@ -125,16 +145,36 @@ TicTacToe.computerTurn = function() {
     }
 };
 
+// Score method for minimax
+
+TicTacToe.score = function(game) {
+
+    if(TicTacToe.checkForWin(2)) {
+        return 10;
+    } if (TicTacToe.checkForWin(1)) {
+        return -10;
+    } else {
+        return 0;
+    }
+};
+
+// Minimax method
+
+TicTacToe.minmax = function(depth, player) {
+};
+
 // Click event to play the game
 
 $("td").click(function(event){
     var tdName = event.currentTarget.id;
 
+    // Disallows a player to play on a space that is already taken
     if(event.currentTarget.firstChild !== null) {
         alertBox.html("You can't go there!");
         
     } else if (TicTacToe.playerIs !== "") {
 
+        //Plays the game
         alertBox.html("");
         
         TicTacToe.changeBoard(tdName, TicTacToe.player);
@@ -143,11 +183,8 @@ $("td").click(function(event){
 
         TicTacToe.computerTurn();
         
-        // check for winner
-        // computer goes
-        //check for winner again
-        
     } else {
+        // Makes the player pick a side first
         alertBox.html("Pick a side, please.");
     }
 });
@@ -177,11 +214,10 @@ $("#x").click(function() {
 
         TicTacToe.setPlayer("fa fa-times", "fa fa-circle-o");
         $("#x").addClass("picked").removeClass("choices");
+        TicTacToe.computerTurn();
     
     } else {
         alertBox.html("You already picked a side!");
     }
 
 });
-
-msg($("td"));
