@@ -1,7 +1,3 @@
-var msg = function(text) {
-  console.log(text);
-};
-
 //////////////////////
 // Global Variables //
 //////////////////////
@@ -14,20 +10,20 @@ var alertBox = $(".alert"); // Quick alert section grab
 
 /*
 Starts the TicTacToe object.
-"player" sets the player value to 1 so 
+"player" sets the player value to 1 so
 that we can differentiate it from the computer's value.
 "board" sets up an empty board.
-"wins" shows the possible wins using the array index, 
+"wins" shows the possible wins using the array index,
 starting with rows, then columns, then diagonals.
-"playerIs" and "computerIs" will hold the text for who 
+"playerIs" and "computerIs" will hold the text for who
 is O and who is X while using the FontAwesome Icons.
 */
 
 var TicTacToe = {
   player: 1,
   computer: 2,
-  board: [0,0,0,0,0,0,0,0,0,],
-  wins: [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[1,4,8],[2,4,6]],
+  board: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  wins: [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]],
   idNames: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"],
   playerIs: "",
   computerIs: "",
@@ -43,9 +39,23 @@ TicTacToe.setPlayer = function(player, computer) {
 // Checks for a win
 
 TicTacToe.checkForWin = function(game, player) {
-  //for loop to go through the different win conditions
-  // var match = false
-  // for loop to go through the different cells to check
+
+  var wins = TicTacToe.wins;
+
+  for (var i = 0; i < wins.length; i++) {
+
+    // checks to see if all three cells for the win match
+    if (game[wins[i][0]] === player &&
+        game[wins[i][1]] === player &&
+        game[wins[i][2]] === player) {
+
+      return true;
+
+    }
+
+  }
+
+  return false;
 
 };
 
@@ -94,7 +104,7 @@ TicTacToe.changeBoard = function(name, player) {
 // Converts the where the computer wants to go to an ID name for the table
 
 TicTacToe.convertToID = function(num) {
-  
+
   return TicTacToe.idNames[num];
 };
 
@@ -128,6 +138,64 @@ TicTacToe.min = function(arr) {
   });
 
   return min;
+};
+
+// Gets the 'score' of the board for minimax
+
+TicTacToe.score = function(game, depth) {
+  if( TicTacToe.checkForWin(game, TicTacToe.computer)) {
+    return 10 - depth;
+  } else if (TicTacToe.checkForWin(game, TicTacToe.player)) {
+    return depth - 10;
+  } else {
+    return 0;
+  }
+};
+
+TicTacToe.computerTurn = function() {
+  // grab move from minimax
+  // get id to match move from minimax
+  // check to see if the computer won
+};
+
+TicTacToe.miniMax = function(game, player, depth) {
+
+  if (TicTacToe.checkForDraw(game) || TicTacToe.checkForWin(game, player) || depth === 5) {
+      return TicTacToe.score(game, depth);
+  }
+  var scores = [];
+  var moves = [];
+  depth++;
+
+  for (var i = 0; i < game.length; i++) {
+
+    if (game[i] === 0) {
+      var tempGame = game;
+      tempGame[i] = player;
+      if (player === TicTacToe.computer) {
+        scores.push(TicTacToe.miniMax(tempGame, TicTacToe.player, depth));
+        moves.push(i);
+      } else {
+        scores.push(TicTacToe.miniMax(tempGame, TicTacToe.computer, depth));
+        moves.push(i);
+      }
+    }
+
+  }
+
+  console.log("Moves:", moves);
+  console.log("Scores:", scores);
+
+  if (player === TicTacToe.computer) {
+    maxScore = TicTacToe.max(scores);
+    scoreIndex = scores.indexOf(maxScore);
+    return scores[scoreIndex];
+  } else {
+    minScore = TicTacToe.min(scores);
+    scoreIndex = scores.indexOf(minScore);
+    return scores[scoreIndex];
+  }
+
 };
 
 //////////////////////
@@ -195,7 +263,6 @@ $("#x").click(function() {
 
 TicTacToe.computerTurn
 TicTacToe.minMax
-TicTacToe.checkForWin
 TicTacToe.reset
 
 */
