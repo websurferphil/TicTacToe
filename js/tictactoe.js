@@ -104,99 +104,226 @@ TicTacToe.changeBoard = function(name, player) {
 // Converts the where the computer wants to go to an ID name for the table
 
 TicTacToe.convertToID = function(num) {
-
   return TicTacToe.idNames[num];
 };
 
-// Returns max value from array
-
-TicTacToe.max = function(arr) {
-  var max = -99999;
-
-  arr.forEach(function(num) {
-    if (num > max) {
-      max = num;
-    } else {
-      max = max;
-    }
-  });
-
-  return max;
-};
-
-// Returns min value from array
-
-TicTacToe.min = function(arr) {
-  var min = 99999;
-
-  arr.forEach(function(num) {
-    if (num < min) {
-      min = num;
-    } else {
-      min = min;
-    }
-  });
-
-  return min;
-};
-
-// Gets the 'score' of the board for minimax
-
-TicTacToe.score = function(game, depth) {
-  if( TicTacToe.checkForWin(game, TicTacToe.computer)) {
-    return 10 - depth;
-  } else if (TicTacToe.checkForWin(game, TicTacToe.player)) {
-    return depth - 10;
-  } else {
-    return 0;
-  }
-};
-
 TicTacToe.computerTurn = function() {
-  // grab move from minimax
-  // get id to match move from minimax
-  // check to see if the computer won
+  //Looks at the board
+  var rowTop = TicTacToe.look([TicTacToe.board[0], TicTacToe.board[1], TicTacToe.board[2]]);
+  var rowMid = TicTacToe.look([TicTacToe.board[3], TicTacToe.board[4], TicTacToe.board[5]]);
+  var rowBot = TicTacToe.look([TicTacToe.board[6], TicTacToe.board[7], TicTacToe.board[8]]);
+  var colLeft = TicTacToe.look([TicTacToe.board[0], TicTacToe.board[3], TicTacToe.board[6]]);
+  var colMid = TicTacToe.look([TicTacToe.board[1], TicTacToe.board[4], TicTacToe.board[7]]);
+  var colRight = TicTacToe.look([TicTacToe.board[2], TicTacToe.board[5], TicTacToe.board[8]]);
+  var diagLeft = TicTacToe.look([TicTacToe.board[0], TicTacToe.board[4], TicTacToe.board[8]]);
+  var diagRight = TicTacToe.look([TicTacToe.board[2], TicTacToe.board[4], TicTacToe.board[6]]);
+
+  // Finds a win for the computer
+
+  if (rowTop[0] === 2 && rowTop[1] !== 1) {
+
+  } else if(rowMid[0] === 2 && rowMid[1] !== 1) {
+
+  } else if(rowBot[0] === 2 && rowBot[1] !== 1) {
+
+  } else if(colLef[0] === 2 && colLef[1] !== 1) {
+
+  } else if(colMid[0] === 2 && colMid[1] !== 1) {
+
+  } else if(colRight[0] === 2 && colRight[1] !== 1) {
+
+  } else if(diagLeft[0] === 2 && diagLeft[1] !== 1) {
+
+  } else if(diagRight[0] === 2 && diagRight[1] !== 1) {
+
+  }
+
+  // Finds a win for the player, computer will block
+
+  if (rowTop[1] === 2 && rowTop[0] !== 1) {
+
+  } else if(rowMid[1] === 2 && rowMid[0] !== 1) {
+
+  } else if(rowBot[1] === 2 && rowBot[0] !== 1) {
+
+  } else if(colLef[1] === 2 && colLef[0] !== 1) {
+
+  } else if(colMid[1] === 2 && colMid[0] !== 1) {
+
+  } else if(colRight[1] === 2 && colRight[0] !== 1) {
+
+  } else if(diagLeft[1] === 2 && diagLeft[0] !== 1) {
+
+  } else if(diagRight[1] === 2 && diagRight[0] !== 1) {
+
+  }
+
+  // If all else fails, choose another space!
+  var placement = TicTacToe.altMove();
+
 };
 
-TicTacToe.miniMax = function(game, player, depth) {
 
-  if (TicTacToe.checkForDraw(game) || TicTacToe.checkForWin(game, player) || depth === 5) {
-      return TicTacToe.score(game, depth);
+
+// Brute force methods. Inspiration from TheDukeOfAwesome
+// Modified to fit the code
+
+//Gets the first move for the computer
+
+TicTacToe.firstMove = function() {
+  var placement = Math.floor(Math.random()*5);
+
+  switch (placement) {
+    case 0:
+      TicTacToe.changeBoard("one", TicTacToe.computer); // Top left corner
+      $("#one").html("<i class='" + TicTacToe.computerIs + "'></i>");
+      break;
+    case 1:
+      TicTacToe.changeBoard("three", TicTacToe.computer); // Top right corner
+      $("#three").html("<i class='" + TicTacToe.computerIs + "'></i>");
+      break;
+    case 2:
+      TicTacToe.changeBoard("five", TicTacToe.computer); // Center
+      $("#five").html("<i class='" + TicTacToe.computerIs + "'></i>");
+      break;
+    case 3:
+      TicTacToe.changeBoard("seven", TicTacToe.computer); // Bottom left corner
+      $("#seven").html("<i class='" + TicTacToe.computerIs + "'></i>");
+      break;
+    case 4:
+      TicTacToe.changeBoard("nine", TicTacToe.computer); // Bottom right corner.
+      $("#nine").html("<i class='" + TicTacToe.computerIs + "'></i>");
+      break;
+    default:
+      break;
   }
-  var scores = [];
-  var moves = [];
-  depth++;
 
-  for (var i = 0; i < game.length; i++) {
+  return placement;
+};
 
-    if (game[i] === 0) {
-      var tempGame = game;
-      tempGame[i] = player;
-      if (player === TicTacToe.computer) {
-        scores.push(TicTacToe.miniMax(tempGame, TicTacToe.player, depth));
-        moves.push(i);
-      } else {
-        scores.push(TicTacToe.miniMax(tempGame, TicTacToe.computer, depth));
-        moves.push(i);
-      }
+TicTacToe.look = function (whichCells) {
+
+  // Looks for the amount of cells that are taken up by the player or the computer
+
+  var compAmount = 0;
+  var playerAmount = 0;
+
+  whichCells.forEach(function(num) {
+    if (num === 1) {
+      playerAmount++;
+    } else if (num === 2) {
+      compAmount++;
     }
+  });
 
-  }
+  // Returns the amount of cells taken up by the comptuer or the player
+  return [compAmount, playerAmount];
 
-  console.log("Moves:", moves);
-  console.log("Scores:", scores);
+};
 
-  if (player === TicTacToe.computer) {
-    maxScore = TicTacToe.max(scores);
-    scoreIndex = scores.indexOf(maxScore);
-    return scores[scoreIndex];
-  } else {
-    minScore = TicTacToe.min(scores);
-    scoreIndex = scores.indexOf(minScore);
-    return scores[scoreIndex];
+TicTacToe.findHole = function(cells) {
+// Finds the zero
+  switch (cells) {
+    case "rowTop":
+      if ( TicTacToe.board[0] === 0) {
+        return 0;
+      } else if ( TicTacToe.board[1] === 0) {
+        return 1;
+      } else if ( TicTacToe.board[2] === 0) {
+        return 2;
+      }
+      break;
+    case "rowMid":
+      if ( TicTacToe.board[3] === 0) {
+        return 3;
+      } else if ( TicTacToe.board[4] === 0) {
+        return 4;
+      } else if ( TicTacToe.board[5] === 0) {
+        return 5;
+      }
+      break;
+    case "rowBot":
+      if ( TicTacToe.board[6] === 0) {
+        return 6;
+      } else if ( TicTacToe.board[7] === 0) {
+        return 7;
+      } else if ( TicTacToe.board[8] === 0) {
+        return 8;
+      }
+      break;
+    case "colLeft":
+      if ( TicTacToe.board[0] === 0) {
+        return 0;
+      } else if ( TicTacToe.board[3] === 0) {
+        return 3;
+      } else if ( TicTacToe.board[6] === 0) {
+        return 6;
+      }
+      break;
+    case "colMid":
+      if ( TicTacToe.board[1] === 0) {
+        return 1;
+      } else if ( TicTacToe.board[4] === 0) {
+        return 4;
+      } else if ( TicTacToe.board[7] === 0) {
+        return 7;
+      }
+      break;
+    case "colRight":
+      if ( TicTacToe.board[2] === 0) {
+        return 2;
+      } else if ( TicTacToe.board[5] === 0) {
+        return 5;
+      } else if ( TicTacToe.board[8] === 0) {
+        return 8;
+      }
+      break;
+    case "diagLeft":
+      if ( TicTacToe.board[0] === 0) {
+        return 0;
+      } else if ( TicTacToe.board[4] === 0) {
+        return 4;
+      } else if ( TicTacToe.board[8] === 0) {
+        return 8;
+      }
+      break;
+    case "diagRight":
+      if ( TicTacToe.board[2] === 0) {
+        return 2;
+      } else if ( TicTacToe.board[4] === 0) {
+        return 5;
+      } else if ( TicTacToe.board[6] === 0) {
+        return 7;
+      }
+      break;
+    default:
+      break;
   }
 
 };
+
+TicTacToe.altMove = function() {
+  if ( TicTacToe.board[0] === 0) {
+    return 0;
+  } else if ( TicTacToe.board[2] === 0) {
+    return 2;
+  } else if ( TicTacToe.board[4] === 0) {
+    return 4;
+  } else if ( TicTacToe.board[6] === 0) {
+    return 6;
+  } else if ( TicTacToe.board[8] === 0) {
+    return 8;
+  } else if ( TicTacToe.board[1] === 0) {
+    return 1;
+  } else if ( TicTacToe.board[7] === 0) {
+    return 7;
+  } else if ( TicTacToe.board[3] === 0) {
+    return 3;
+  } else if ( TicTacToe.board[5] === 0) {
+    return 5;
+  }
+};
+
 
 //////////////////////
 // The click events //
@@ -233,9 +360,9 @@ $("#o").click(function() {
   if (TicTacToe.playerIs === "") {
 
     alertBox.html("");
-
     TicTacToe.setPlayer("fa fa-circle-o", "fa fa-times");
     $("#o").addClass("picked").removeClass("choices");
+    TicTacToe.firstMove();
 
   } else {
     alertBox.html("You already picked a side!");
@@ -248,10 +375,9 @@ $("#x").click(function() {
   if (TicTacToe.playerIs === "") {
 
     alertBox.html("");
-
     TicTacToe.setPlayer("fa fa-times", "fa fa-circle-o");
     $("#x").addClass("picked").removeClass("choices");
-    TicTacToe.computerTurn();
+    TicTacToe.firstMove();
 
   } else {
     alertBox.html("You already picked a side!");
