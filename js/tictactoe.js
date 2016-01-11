@@ -1,8 +1,9 @@
-//////////////////////
-// Global Variables //
-//////////////////////
+/////////////////////////////////
+// Global Variables  and Start //
+/////////////////////////////////
 
 var alertBox = $(".alert"); // Quick alert section grab
+$(".winner").hide();
 
 ////////////////
 // The Object //
@@ -27,6 +28,7 @@ var TicTacToe = {
   idNames: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"],
   playerIs: "",
   computerIs: "",
+  winner: false
 };
 
 // Sets who is X and who is O
@@ -117,49 +119,67 @@ TicTacToe.computerTurn = function() {
   var colRight = TicTacToe.look([TicTacToe.board[2], TicTacToe.board[5], TicTacToe.board[8]]);
   var diagLeft = TicTacToe.look([TicTacToe.board[0], TicTacToe.board[4], TicTacToe.board[8]]);
   var diagRight = TicTacToe.look([TicTacToe.board[2], TicTacToe.board[4], TicTacToe.board[6]]);
-
   // Finds a win for the computer
 
   if (rowTop[0] === 2 && rowTop[1] !== 1) {
-
+    TicTacToe.move("rowTop");
+    return;
   } else if(rowMid[0] === 2 && rowMid[1] !== 1) {
-
+    TicTacToe.move("rowMid");
+    return;
   } else if(rowBot[0] === 2 && rowBot[1] !== 1) {
-
-  } else if(colLef[0] === 2 && colLef[1] !== 1) {
-
+    TicTacToe.move("rowBot");
+    return;
+  } else if(colLeft[0] === 2 && colLeft[1] !== 1) {
+    TicTacToe.move("colLeft");
+    return;
   } else if(colMid[0] === 2 && colMid[1] !== 1) {
-
+    TicTacToe.move("colMid");
+    return;
   } else if(colRight[0] === 2 && colRight[1] !== 1) {
-
+    TicTacToe.move("colRight");
+    return;
   } else if(diagLeft[0] === 2 && diagLeft[1] !== 1) {
-
+    TicTacToe.move("diagLeft");
+    return;
   } else if(diagRight[0] === 2 && diagRight[1] !== 1) {
-
+    TicTacToe.move("diagRight");
+    return;
   }
 
   // Finds a win for the player, computer will block
 
   if (rowTop[1] === 2 && rowTop[0] !== 1) {
-
+    TicTacToe.move("rowTop");
+    return;
   } else if(rowMid[1] === 2 && rowMid[0] !== 1) {
-
+    TicTacToe.move("rowMid");
+    return;
   } else if(rowBot[1] === 2 && rowBot[0] !== 1) {
-
-  } else if(colLef[1] === 2 && colLef[0] !== 1) {
-
+    TicTacToe.move("rowBot");
+    return;
+  } else if(colLeft[1] === 2 && colLeft[0] !== 1) {
+    TicTacToe.move("colLeft");
+    return;
   } else if(colMid[1] === 2 && colMid[0] !== 1) {
-
+    TicTacToe.move("colMid");
+    return;
   } else if(colRight[1] === 2 && colRight[0] !== 1) {
-
+    TicTacToe.move("colRight");
+    return;
   } else if(diagLeft[1] === 2 && diagLeft[0] !== 1) {
-
+    TicTacToe.move("diagLeft");
+    return;
   } else if(diagRight[1] === 2 && diagRight[0] !== 1) {
-
+    TicTacToe.move("diagRight");
+    return;
   }
 
   // If all else fails, choose another space!
-  var placement = TicTacToe.altMove();
+  var num = TicTacToe.altMove();
+  var placement = TicTacToe.convertToID(num);
+  TicTacToe.changeBoard(placement, TicTacToe.computer);
+  $("#" +  placement).html("<i class='"+ TicTacToe.computerIs + "'></i>");
 
 };
 
@@ -201,9 +221,9 @@ TicTacToe.firstMove = function() {
   return placement;
 };
 
-TicTacToe.look = function (whichCells) {
+// Looks for the amount of cells that are taken up by the player or the computer
 
-  // Looks for the amount of cells that are taken up by the player or the computer
+TicTacToe.look = function (whichCells) {
 
   var compAmount = 0;
   var playerAmount = 0;
@@ -221,8 +241,10 @@ TicTacToe.look = function (whichCells) {
 
 };
 
+// Finds the hole when there are two in the three cells
+
 TicTacToe.findHole = function(cells) {
-// Finds the zero
+
   switch (cells) {
     case "rowTop":
       if ( TicTacToe.board[0] === 0) {
@@ -291,9 +313,9 @@ TicTacToe.findHole = function(cells) {
       if ( TicTacToe.board[2] === 0) {
         return 2;
       } else if ( TicTacToe.board[4] === 0) {
-        return 5;
+        return 4;
       } else if ( TicTacToe.board[6] === 0) {
-        return 7;
+        return 6;
       }
       break;
     default:
@@ -301,6 +323,8 @@ TicTacToe.findHole = function(cells) {
   }
 
 };
+
+// Alt moves the computer can take if there is no winning nor blocking move to make
 
 TicTacToe.altMove = function() {
   if ( TicTacToe.board[0] === 0) {
@@ -324,6 +348,27 @@ TicTacToe.altMove = function() {
   }
 };
 
+TicTacToe.move = function(row) {
+    var hole = TicTacToe.findHole(row);
+    var placement = TicTacToe.convertToID(hole);
+    TicTacToe.changeBoard(placement, TicTacToe.computer);
+    $("#" + placement).html("<i class='"+ TicTacToe.computerIs + "'></i>");
+    return;
+};
+
+TicTacToe.restart = function() {
+  TicTacToe.board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  TicTacToe.playerIs = "";
+  TicTacToe.computerIs = "";
+  TicTacToe.winner = false;
+  $("td").html("");
+  $("#o").addClass("choices").removeClass("picked");
+  $("#x").addClass("choices").removeClass("picked");
+  alertBox.html("");
+};
+
+
+
 
 //////////////////////
 // The click events //
@@ -336,6 +381,9 @@ $("td").click(function(event) {
   if (event.currentTarget.firstChild !== null) {
     alertBox.html("You can't go there!");
 
+  } else if (TicTacToe.winner) {
+    alertBox.html("Please restart to go again.");
+
   } else if (TicTacToe.playerIs !== "") {
 
     //Plays the game
@@ -345,9 +393,33 @@ $("td").click(function(event) {
 
     $("#" + tdName).html("<i class='" + TicTacToe.playerIs + "'></i>");
 
+    if(TicTacToe.checkForDraw(TicTacToe.board)){
+      $(".winner").fadeIn();
+      TicTacToe.winner = true;
+      $("#winning-player").html("It is a draw.");
+
+    } else if(TicTacToe.checkForWin(TicTacToe.board, TicTacToe.player)){
+      $(".winner").fadeIn();
+      TicTacToe.winner = true;
+      $("#winning-player").html("The player is the winner!");
+
+    }
+
     TicTacToe.computerTurn();
 
-  } else {
+    if(TicTacToe.checkForDraw(TicTacToe.board)){
+      $(".winner").fadeIn();
+      TicTacToe.winner = true;
+      $("#winning-player").html("It is a draw.");
+
+    } else if(TicTacToe.checkForWin(TicTacToe.board, TicTacToe.computer)){
+      $(".winner").fadeIn();
+      TicTacToe.winner = true;
+      $("#winning-player").html("The computer is the winner!");
+
+    }
+
+  }  else {
     // Makes the player pick a side first
     alertBox.html("Pick a side, please.");
   }
@@ -385,10 +457,9 @@ $("#x").click(function() {
 
 });
 
-/*
+$(".restart-button").click(function() {
 
-TicTacToe.computerTurn
-TicTacToe.minMax
-TicTacToe.reset
+  TicTacToe.restart();
+  $(".winner").fadeOut();
 
-*/
+});

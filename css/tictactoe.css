@@ -26,7 +26,7 @@ td{
 #three{
     border-bottom: 2px solid black;
     border-left: 2px solid black;
-    
+
 }
 #four{
     border-right: 2px solid black;
@@ -43,7 +43,7 @@ td{
     border-bottom: 2px solid black;
     border-left: 2px solid black;
     border-top: 2px solid black;
-    
+
 }
 #seven{
     border-right: 2px solid black;
@@ -57,7 +57,7 @@ td{
 #nine{
     border-left: 2px solid black;
     border-top: 2px solid black;
-    
+
 }
 
 .choose {
@@ -65,6 +65,7 @@ td{
     width: 75%;
     margin: 0 auto;
     text-align: center;
+    z-index: 0;
 }
 
 
@@ -82,4 +83,42 @@ td{
     height: 50px;
     vertical-align: central;
     font-size: 2em;
+    z-index: 0;
+}
+
+.winner {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+
+  padding: 15px;
+
+  width: 300px;
+  height: 70px;
+  border: 1px solid #2284C3;
+  border-radius: 25px;
+  background-color: white;
+
+  text-align: center;
+}
+
+.restart-button {
+  background-color: #B23D3D;
+  padding: 5px;
+  font-size: 1.2em;
+  color: #541212;
+  border: 1px solid #544747;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.winner p {
+  margin: 0;
+  padding: 0;
+  padding-top: 5px;
+  line-height: 0;
 }
