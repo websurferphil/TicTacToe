@@ -327,7 +327,9 @@ TicTacToe.findHole = function(cells) {
 // Alt moves the computer can take if there is no winning nor blocking move to make
 
 TicTacToe.altMove = function() {
-  if ( TicTacToe.board[0] === 0) {
+  if ( TicTacToe.board[4] === 0) {
+    return 4;
+  } else if ( TicTacToe.board[0] === 0) {
     return 0;
   } else if ( TicTacToe.board[2] === 0) {
     return 2;
@@ -356,7 +358,9 @@ TicTacToe.move = function(row) {
     return;
 };
 
-TicTacToe.restart = function() {
+// restarts the board. true equals a full restart, false equals a board clear
+TicTacToe.restart = function(bool) {
+  if (bool) {
   TicTacToe.board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   TicTacToe.playerIs = "";
   TicTacToe.computerIs = "";
@@ -365,6 +369,12 @@ TicTacToe.restart = function() {
   $("#o").addClass("choices").removeClass("picked");
   $("#x").addClass("choices").removeClass("picked");
   alertBox.html("");
+  } else {
+    TicTacToe.board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    TicTacToe.winner = false;
+    $("td").html("");
+    alertBox.html("");
+  }
 };
 
 
@@ -393,31 +403,32 @@ $("td").click(function(event) {
 
     $("#" + tdName).html("<i class='" + TicTacToe.playerIs + "'></i>");
 
-    if(TicTacToe.checkForDraw(TicTacToe.board)){
-      $(".winner").fadeIn();
-      TicTacToe.winner = true;
-      $("#winning-player").html("It is a draw.");
-
-    } else if(TicTacToe.checkForWin(TicTacToe.board, TicTacToe.player)){
+     if(TicTacToe.checkForWin(TicTacToe.board, TicTacToe.player)){
       $(".winner").fadeIn();
       TicTacToe.winner = true;
       $("#winning-player").html("The player is the winner!");
+
+    } else if(TicTacToe.checkForDraw(TicTacToe.board)){
+      $(".winner").fadeIn();
+      TicTacToe.winner = true;
+      $("#winning-player").html("It is a draw.");
 
     }
 
     TicTacToe.computerTurn();
 
-    if(TicTacToe.checkForDraw(TicTacToe.board)){
-      $(".winner").fadeIn();
-      TicTacToe.winner = true;
-      $("#winning-player").html("It is a draw.");
+    if(TicTacToe.checkForWin(TicTacToe.board, TicTacToe.computer)){
+     $(".winner").fadeIn();
+     TicTacToe.winner = true;
+     $("#winning-player").html("The computer is the winner!");
 
-    } else if(TicTacToe.checkForWin(TicTacToe.board, TicTacToe.computer)){
-      $(".winner").fadeIn();
-      TicTacToe.winner = true;
-      $("#winning-player").html("The computer is the winner!");
+      } else if(TicTacToe.checkForDraw(TicTacToe.board)){
 
-    }
+       $(".winner").fadeIn();
+       TicTacToe.winner = true;
+       $("#winning-player").html("It is a draw.");
+
+     }
 
   }  else {
     // Makes the player pick a side first
@@ -457,9 +468,16 @@ $("#x").click(function() {
 
 });
 
-$(".restart-button").click(function() {
+$("#restart").click(function() {
 
-  TicTacToe.restart();
+  TicTacToe.restart(true);
+  $(".winner").fadeOut();
+
+});
+
+$("#clear-board").click(function() {
+
+  TicTacToe.restart(false);
   $(".winner").fadeOut();
 
 });
